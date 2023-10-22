@@ -1,0 +1,26 @@
+
+contract DigitalAssetManagement {
+    struct DigitalAsset {
+        string name;
+        string description;
+        address owner;
+    }
+
+    mapping(uint256 => DigitalAsset) public assets;
+    uint256 public assetCount;
+
+    event AssetCreated(uint256 indexed assetId, string name, address owner);
+    event AssetTransferred(uint256 indexed assetId, address from, address to);
+
+    function createAsset(string memory _name, string memory _description) public {
+        assetCount++;
+        assets[assetCount] = DigitalAsset(_name, _description, msg.sender);
+        emit AssetCreated(assetCount, _name, msg.sender);
+    }
+
+    function transferAsset(uint256 _assetId, address _to) public {
+        require(assets[_assetId].owner == msg.sender, "You are not the owner of this asset");
+        assets[_assetId].owner = _to;
+        emit AssetTransferred(_assetId, msg.sender, _to);
+    }
+}
