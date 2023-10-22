@@ -1,0 +1,21 @@
+const ethers = require('ethers');
+const ABI = [...]; // ABI of your DigitalAssetManagement contract
+const contractAddress = '0xYourContractAddress';
+
+const provider = new ethers.providers.JsonRpcProvider('YOUR_INFURA_URL');
+const wallet = new ethers.Wallet('YOUR_PRIVATE_KEY', provider);
+
+const contract = new ethers.Contract(contractAddress, ABI, wallet);
+
+async function createAsset(name, description) {
+    const tx = await contract.createAsset(name, description);
+    await tx.wait();
+}
+
+async function transferAsset(assetId, to) {
+    const tx = await contract.transferAsset(assetId, to);
+    await tx.wait();
+}
+
+createAsset('Asset1', 'Description of Asset1');
+transferAsset(1, '0xRecipientAddress');
